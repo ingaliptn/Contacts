@@ -1,0 +1,50 @@
+let char_set = "abcdefghijklmnopqrstuvwxyz0123456789@#$%^&*_-+=~/\\";
+
+function random_char() {
+  let char_idx = Math.floor(Math.random() * char_set.length);
+  return char_set.substring(char_idx, char_idx + 1);
+}
+
+function init_title() {
+  let title = document.querySelector("#title");
+  let even = false;
+  setInterval(() => {
+    title.textContent = "> ingaliptn" + (even ? "_" : "\xa0");
+    even = !even;
+  }, 1000);
+}
+
+async function lag_links() {
+  let timeout = Math.round(Math.random() * 10000) + 2000;
+  await sleep(timeout);
+
+  let elements = document.querySelectorAll("a.link");
+  let element = elements[Math.floor(Math.random() * elements.length)];
+  let original_text = element.textContent.toString();
+
+  // on each iteration random position is being selected and replaced with generated char
+  let iterations = Math.floor(Math.random() * original_text.length * 6) + (original_text.length * 4);
+  for (let i = 0; i < iterations; i++) {
+    let char_idx = Math.floor(Math.random() * original_text.length);
+    element.textContent = element.textContent.replaceAt(char_idx, random_char());
+    await sleep(30);
+  }
+
+  // replace generated text with original content
+  let indexes = [];
+  for (let char_idx = 0; char_idx < original_text.length; char_idx++)
+    indexes.push(char_idx);
+  indexes = shuffle(indexes);
+
+  for (idx of indexes) {
+    element.textContent = element.textContent.replaceAt(idx, original_text[idx]);
+    await sleep(30);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  init_title();
+
+  while (true)
+    await lag_links();
+});

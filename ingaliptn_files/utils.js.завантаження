@@ -1,0 +1,15 @@
+String.prototype.replaceAt = function (index, replacement) {
+  // replace the char at the given index
+  return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+};
+
+function sleep(ms) {
+  return new Promise(res => setTimeout(res, ms));
+}
+
+function shuffle(arr) {
+  // shuffle an array
+  return arr.sort(() => {
+    return Math.random() < .75;
+  })
+}
